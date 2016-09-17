@@ -1,0 +1,3 @@
+'use strict'
+
+wk.load('./lib/tasks/release.js', true)
