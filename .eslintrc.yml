@@ -8,6 +8,7 @@ rules:
   semi: 0
   no-console: 0
   prefer-const: 2
+  no-irregular-whitespace: 0
 
 globals:
   wk: true
@@ -45,8 +46,7 @@ ecmaFeatures:
   unicodeCodePointEscapes: false
 
 env:
-  es6: true
-  browser: true
   node: true
+  es6: true
 
 extends: 'eslint:recommended'
