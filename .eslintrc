@@ -19,6 +19,7 @@ globals:
   complete: true
   serie: true
   parallel: true
+  fail: true
 
 ecmaFeatures:
   arrowFunctions: true
