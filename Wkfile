@@ -1,4 +1,4 @@
 'use strict'
 
-wk.load('./lib/tasks/bump.js', true)
-wk.load('./lib/tasks/test.js', true)
+wk.load('./lib/tasks/release.js', true)
+// wk.load('./lib/tasks/test.js', true)
