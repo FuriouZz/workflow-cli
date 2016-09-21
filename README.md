@@ -15,6 +15,38 @@ Workflow CLI inspired from [Jake.js](https://github.com/jakejs/jake)
    --tasks -T                              List available tasks
 ```
 
+# CLI
+
+Execute the task `mytask`
+
+`wk mytask`
+
+From the namespace `mynamespace`
+
+`wk mynamespace:mytask`
+
+Pass arguments
+
+`wk hello -- [ World ]`
+
+```
+task('hello', function( message ) {
+  console.log('Hello ' + message + '!')
+  // Print "Hello World!"
+})
+```
+
+Pass variable
+
+`wk hello -- [ --who Jack ]`
+
+```
+task('hello', function() {
+  console.log('Hello ' + this.argv.who + '!')
+  // Print "Hello Jack!"
+})
+```
+
 # API
 
 ## `desc(string)`
@@ -33,13 +65,18 @@ task('foo', function() {
   console.log('Foo')
 })
 
-// When async is true, a complete function must be executed
-task('bar', { async: true }, function( complete ) {
+// When async is true, this.complete() function must be executed
+task('bar', { async: true }, function() {
+  var scope = this
+
   setTimeout(function() {
     console.log('bar')
-    complete()
+    scope.complete()
   }, 2000)
 })
+
+// If something went wrong, you can call this.fail()
+
 
 // By default prerequisites are executed in serie,
 // but you can specified to be executed in parallel
@@ -48,6 +85,40 @@ task('baz', [ 'foo', 'bar' ], { preReqSequence: 'parallel' })
 ```
 
 **Note: If `prerequisites` are executed in `serie` but a task has async option setted to `false`, the complete function will be executed at task execution.**
+
+### Passing values through tasks
+
+```
+task('task0', function() {
+  return 'task0'
+})
+
+task('task1', { async: true } function() {
+  var scope = this
+
+  setTimeout(function() {
+    scope.complete( 'task1' )
+  }, 2000)
+})
+
+task('task2', [ 'task0', 'task1' ], function() {
+  console.log( wk.Tasks['task0'].value )
+  // Print "task0"
+
+  console.log( wk.Tasks['task1'].value )
+  // Print "task1"
+})
+```
+
+### `execute`, `invoke`, `reenable`
+
+Like [Jake.js](https://github.com/jakejs/jake), you can choose between `execute` and `invoke`.
+
+Use `invoke` to execute the task with prerequisites.
+
+Use `execute` to execute the task only.
+
+A task is executed only once. You can reenable it with `wk.Task[taskname].reenable()`.
 
 ## `command(name[, prerequisites, options, command])`
 
