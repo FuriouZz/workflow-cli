@@ -1,6 +1,6 @@
 {
   "name": "workflow-cli",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Workflow CLI inspired from Jake.js",
   "main": "lib/index.js",
   "bin": {
