@@ -1,0 +1,8 @@
+'use strict'
+
+task('no_action')
+
+const actionLater = task('action_later')
+actionLater.action = function() {
+  console.log('Action later')
+}
