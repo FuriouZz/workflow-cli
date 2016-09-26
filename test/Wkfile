@@ -1,8 +1,29 @@
 'use strict'
 
+// No action
 task('no_action')
 
+// Action setted later
 const actionLater = task('action_later')
 actionLater.action = function() {
-  console.log('Action later')
+  return 'complete'
 }
+
+// Execute tasks in serie
+task('task_sync', function() {
+  return this.path+':complete'
+})
+
+task('task_async', { async: true }, function() {
+  const scope = this
+
+  setTimeout(function() {
+    scope.complete(scope.path+':complete')
+  }, 500)
+
+  return this.path+':incomplete'
+})
+
+task('serie0', [ 'task_sync', 'task_async' ], function() {
+  return this.path+':complete'
+})
