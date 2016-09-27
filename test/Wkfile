@@ -9,6 +9,10 @@ actionLater.action = function() {
   return 'complete'
 }
 
+task('task_fail', function() {
+  this.fail( 'fail' )
+})
+
 // Execute tasks in serie
 task('task_sync', function() {
   return this.path+':complete'
@@ -24,6 +28,21 @@ task('task_async', { async: true }, function() {
   return this.path+':incomplete'
 })
 
+
 task('serie0', [ 'task_sync', 'task_async' ], function() {
+  return this.path+':complete'
+})
+
+task('task_sync_async', { async: false }, function() {
+  const scope = this
+
+  setTimeout(function() {
+    scope.complete(scope.path+':complete')
+  }, 2000)
+
+  return this.path+':incomplete'
+})
+
+task('parallel0', [ 'task_sync', 'task_async', 'task_sync_async' ], { preReqSequence: 'parallel' }, function() {
   return this.path+':complete'
 })

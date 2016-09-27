@@ -1,8 +1,9 @@
 'use strict'
 
-require('../lib/workflow')
-
+require('../bin/cli.js')
 const assert = require('assert')
+
+// wk.Print.visibility('debug', true)
 
 describe('API', function() {
 
@@ -18,22 +19,39 @@ describe('API', function() {
 
 })
 
-describe('TASK', function() {
+describe('Task', function() {
 
-  it('task without action', function() {
+  it('without action', function() {
     wk.run('no_action')
   })
 
-  it('task with action setted later', function() {
+  it('with action setted later', function() {
     wk.run('action_later')
   })
 
-  describe('SERIE', function() {
+  it('must fail', function( done ) {
+    wk.run('task_fail').catch(function(e) {
+      assert.throws(
+        () => { throw e },
+        (err) => {
+          if (err instanceof Error && /fail/.test(err)) {
+            return true
+          }
+          return false
+        }
+      )
+      done()
+    })
+  })
+
+  describe('Serie', function() {
 
 
-    it('each task must have the right values', function( done ) {
+    it('must have the right values', function( done ) {
 
-      wk.run('serie0').then(function(value) {
+      wk.Tasks['serie0'].reenable()
+
+      wk.Tasks['serie0'].promise.then(function(value) {
         assert.equal(wk.Tasks['task_sync'].value, 'task_sync:complete')
         assert.equal(wk.Tasks['task_async'].value, 'task_async:complete')
         assert.equal(value, 'serie0:complete')
@@ -42,38 +60,73 @@ describe('TASK', function() {
         done(err)
       })
 
+      wk.Tasks['serie0'].invoke()
+
     })
 
-    it('tasks must be executed in the right order', function( done ) {
+    it('must be executed in the right order', function( done ) {
 
       wk.Tasks['serie0'].reenable()
-      wk.Tasks['serie0'].invoke()
 
       // Executed in the right order
       let order = -1
 
-      wk.Tasks['task_sync'].promise.then(function() {
-        order++
-        assert.equal(order, 0)
-      })
-
-      wk.Tasks['task_async'].promise.then(function() {
-        order++
-        assert.equal(order, 1)
-      })
-
-      wk.Tasks['serie0'].promise.then(function() {
+      wk.Tasks['task_sync'] .promise.then(() => { order++; assert.equal(order, 0) })
+      wk.Tasks['task_async'].promise.then(() => { order++; assert.equal(order, 1) })
+      wk.Tasks['serie0']    .promise.then(() => {
         order++
         assert.equal(order, 2)
-
         done()
       })
+
+      wk.Tasks['serie0'].invoke()
 
     })
 
 
   })
 
+  describe('Parallel', function() {
+
+    it('must have the right values', function( done ) {
+
+      wk.Tasks['parallel0'].reenable()
+
+      wk.Tasks['parallel0'].then(function( value ) {
+        assert.equal(wk.Tasks['task_sync'].value, 'task_sync:complete')
+        assert.equal(wk.Tasks['task_async'].value, 'task_async:complete')
+        assert.equal(wk.Tasks['task_sync_async'].value, 'task_sync_async:incomplete')
+        assert.equal(value, 'parallel0:complete')
+        done()
+      }).catch(function(err) {
+        done(err)
+      })
+
+      wk.Tasks['parallel0'].invoke()
+
+    })
+
+    it('must be executed after prerequisites', function( done ) {
+
+      wk.Tasks['parallel0'].reenable()
+
+      // Executed in the right order
+      let count = 0
+
+      wk.Tasks['task_sync']      .promise.then(() => { count++ })
+      wk.Tasks['task_async']     .promise.then(() => { count++ })
+      wk.Tasks['task_sync_async'].promise.then(() => { count++ })
+      wk.Tasks['parallel0']      .promise.then(() => {
+        assert.equal(count, 3)
+        done()
+      })
+
+      wk.Tasks['parallel0'].invoke()
+
+    })
+
+
+  })
 
 
 })
