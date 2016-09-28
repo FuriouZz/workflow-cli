@@ -3,8 +3,13 @@
 const wk  = require('./../lib/workflow.js')
 global.wk = wk
 
-const Command = require('./../lib/command')
-const API     = require('./../lib/api')
+const Command   = require('./../lib/command')
+const API       = require('./../lib/api')
+const ARGParser = require('./../lib/arg-parser')
+
+// Parse arguments
+wk.PARAMS = ARGParser.parse(process.argv.slice(2))
+wk.ARGV   = wk.PARAMS.__
 
 // Check no global property overrided
 const API_KEYS = Object.keys(API)
