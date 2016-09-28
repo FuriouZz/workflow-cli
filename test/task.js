@@ -5,6 +5,7 @@ const assert = require('assert')
 wk.load('./test/Wkfile')
 
 // wk.Print.visibility('debug', true)
+// wk.Print.verbose()
 
 describe('Default', function() {
 

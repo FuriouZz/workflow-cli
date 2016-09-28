@@ -6,9 +6,6 @@
   "bin": {
     "wk": "./bin/cli.js"
   },
-  "scripts": {
-    "test": "mocha test/test.js"
-  },
   "author": "FuriouZz",
   "license": "ISC",
   "dependencies": {
