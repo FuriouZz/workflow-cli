@@ -46,3 +46,8 @@ task('task_sync_async', { async: false }, function() {
 task('parallel0', [ 'task_sync', 'task_async', 'task_sync_async' ], { preReqSequence: 'parallel' }, function() {
   return this.path+':complete'
 })
+
+task('task_param', function( name ) {
+  name = name || this.argv.who
+  return "Hello "+name+"!"
+})

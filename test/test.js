@@ -46,7 +46,6 @@ describe('Task', function() {
 
   describe('Serie', function() {
 
-
     it('must have the right values', function( done ) {
 
       wk.Tasks['serie0'].reenable()
@@ -92,7 +91,7 @@ describe('Task', function() {
 
       wk.Tasks['parallel0'].reenable()
 
-      wk.Tasks['parallel0'].then(function( value ) {
+      wk.Tasks['parallel0'].promise.then(function( value ) {
         assert.equal(wk.Tasks['task_sync'].value, 'task_sync:complete')
         assert.equal(wk.Tasks['task_async'].value, 'task_async:complete')
         assert.equal(wk.Tasks['task_sync_async'].value, 'task_sync_async:incomplete')
@@ -125,6 +124,58 @@ describe('Task', function() {
 
     })
 
+  })
+
+  describe('With parameters', function() {
+
+
+    it('String', function( done ) {
+
+      wk.PARAMS = wk.ARGParser.parse("task_param -- John".split(' '))
+      wk.ARGV   = wk.PARAMS.__
+
+      wk.Tasks['task_param'].reenable()
+
+      wk.Tasks['task_param'].promise.then(( value ) => {
+        assert.equal(value, "Hello John!")
+        done()
+      })
+
+      wk.Tasks['task_param'].invoke()
+
+    })
+
+    it('Array', function( done ) {
+
+      wk.PARAMS = wk.ARGParser.parse("task_param -- [ John ]".split(' '))
+      wk.ARGV   = wk.PARAMS.__
+
+      wk.Tasks['task_param'].reenable()
+
+      wk.Tasks['task_param'].promise.then(( value ) => {
+        assert.equal(value, "Hello John!")
+        done()
+      })
+
+      wk.Tasks['task_param'].invoke()
+
+    })
+
+    it('Object', function( done ) {
+
+      wk.PARAMS = wk.ARGParser.parse("task_param -- [ --who John ]".split(' '))
+      wk.ARGV   = wk.PARAMS.__
+
+      wk.Tasks['task_param'].reenable()
+
+      wk.Tasks['task_param'].promise.then(( value ) => {
+        assert.equal(value, "Hello John!")
+        done()
+      })
+
+      wk.Tasks['task_param'].invoke()
+
+    })
 
   })
 
