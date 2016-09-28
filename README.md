@@ -27,7 +27,7 @@ From the namespace `mynamespace`
 
 Pass arguments
 
-`wk hello -- [ World ]`
+`wk hello -- [ World ]` or `wk hello -- World`
 
 ```
 task('hello', function( message ) {
@@ -55,7 +55,7 @@ Prepare a description for the next task
 
 ## `task(name[, prerequisites, options, action])`
 
-Create a new task with `name`.
+Create a new task with a `name`.
 If `prerequisites` are specified, it will be executed before the task.
 
 Exemple :
@@ -86,6 +86,20 @@ task('baz', [ 'foo', 'bar' ], { preReqSequence: 'parallel' })
 
 **Note: If `prerequisites` are executed in `serie` but a task has async option setted to `false`, the complete function will be executed at task execution.**
 
+### Options
+
+**options.async** (Default: false) — Precise that task is asynchronous. You **MUST** call `this.complete` or `this.fail` to complete the task.
+
+**options.preReqSequence** (Default: serie) - Execute prerequisites in `parallel` or `serie`
+
+**options.visible** (Default: true) - Enable a task to be called by the user. A task hidden can be called by the others.
+
+**options.description** (Default: '') - Add a task description
+
+**options.prerequisites** (Default: null) - Tasks executed before execution of a task
+
+**options.action** (Default: null) - Function called by the task
+
 ### Passing values through tasks
 
 ```
@@ -112,7 +126,7 @@ task('task2', [ 'task0', 'task1' ], function() {
 
 ### `execute`, `invoke`, `reenable`
 
-Like [Jake.js](https://github.com/jakejs/jake), you can choose between `execute` and `invoke`.
+You can choose between `execute` and `invoke`.
 
 Use `invoke` to execute the task with prerequisites.
 
