@@ -1,10 +1,48 @@
 'use strict'
 
-wk.load('./lib/tasks/release', true)
+// wk.load('./lib/tasks/release', true)
+// const release = require('./lib/extras/release')
 
-namespace('test', function() {
-  task('default', [ 'test:api', 'test:task' ])
 
-  command('api', 'mocha test/api.js')
-  command('task', 'mocha test/task.js')
+
+task('task0', function() {
+  console.log('Execute', this.path)
 })
+
+task('task1', function() {
+  console.log('Execute', this.path)
+})
+
+task('task2', function() {
+  console.log('Execute', this.path)
+})
+
+
+const hook = require('./lib/extras/hook')
+
+hook('task0', {
+  pre: function() {
+    console.log('Execute', this.path)
+  },
+  post: [ 'task1', 'task2' ]
+})
+
+
+
+
+// hook('task0:pre', function() {
+
+// })
+
+// hook('task0:post', function() {
+
+// })
+
+
+
+// namespace('test', function() {
+//   task('default', [ 'test:api', 'test:task' ])
+
+//   command('api', 'mocha test/api.js')
+//   command('task', 'mocha test/task.js')
+// })
