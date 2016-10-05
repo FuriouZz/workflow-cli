@@ -1,23 +1,17 @@
 'use strict'
 
-process.argv.push('--test')
-require('../bin/cli.js')
+require('./_common')
 const assert = require('assert')
-wk.load('./test/Wkfile')
-
-// wk.Print.visibility('debug', true)
 
 it('must have the right values', function( done ) {
 
-  wk.Tasks['hook:task0'].promise.then(function() {
-    assert.equal(wk.Tasks['hook:per-task0'].value , 'hook:per-task0')
-    assert.equal(wk.Tasks['hook:pre-task0'].value , 'hook:pre-task0')
-    assert.equal(wk.Tasks['hook:post-task0'].value, 'hook:post-task0')
+  wk.run('hook:task0').then(function() {
+    assert.equal(wk.Tasks['hook:task0'].value , 'hook:task0')
+    assert.equal(wk.Tasks['hook:pretask0'].value , 'hook:pretask0')
+    assert.equal(wk.Tasks['hook:posttask0'].value, 'hook:posttask0')
     done()
   }).catch(function(err) {
     done(err)
   })
-
-  wk.Tasks['hook:task0'].invoke()
 
 })

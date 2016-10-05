@@ -1,11 +1,7 @@
 'use strict'
 
-process.argv.push('--test')
-require('../bin/cli.js')
+require('./_common')
 const assert = require('assert')
-wk.load('./test/Wkfile')
-
-// wk.Print.visibility('debug', true)
 
 it('should returns functions', function() {
   assert(desc)
