@@ -78,15 +78,45 @@ task('task2', [ 'task0', 'task1' ], function() {
 })
 ```
 
+### Execution and hooks
+
+You can execute a task thanks to `wk.run` method. This method will execute the task and its prerequisites.
+
+Moreover, you can create hook tasks with the prefix `pre` or `post`.
+
+```
+
+task('task0', function() {
+  console.log('task0')
+})
+
+task('pretask0', function() {
+  console.log('pretask0')
+})
+
+task('posttask0', function() {
+  console.log('posttask0')
+})
+
+wk.run('task0')
+
+// "pretask0" "task0" "posttask0"
+
+```
+
+
 ### `execute`, `invoke`, `reenable`
 
-You can choose between `execute` and `invoke`.
+You can access to a task in `wk.Tasks` and execute it with two methods : `execute` or `invoke`.
 
 Use `invoke` to execute the task with prerequisites.
 
 Use `execute` to execute the task only.
 
-A task is executed only once. You can reenable it with `wk.Task[taskname].reenable()`.
+A task is executed only once. You can reenable it with `wk.Tasks[taskname].reenable()`.
+
+If you want to execute hooks, you must use `wk.run`
+
 
 ## `command(name[, prerequisites, options, command])`
 
