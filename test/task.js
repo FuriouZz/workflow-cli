@@ -1,5 +1,6 @@
 'use strict'
 
+process.argv.push('--test')
 require('../bin/cli.js')
 const assert = require('assert')
 wk.load('./test/Wkfile')

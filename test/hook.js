@@ -1,12 +1,13 @@
 'use strict'
 
+process.argv.push('--test')
 require('../bin/cli.js')
 const assert = require('assert')
 wk.load('./test/Wkfile')
 
 // wk.Print.visibility('debug', true)
 
-it('should returns functions', function( done ) {
+it('must have the right values', function( done ) {
 
   wk.Tasks['hook:task0'].promise.then(function() {
     assert.equal(wk.Tasks['hook:per-task0'].value , 'hook:per-task0')

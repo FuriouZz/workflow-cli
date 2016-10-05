@@ -5,7 +5,7 @@ wk.load('./lib/tasks/release', true)
 namespace('test', function() {
   task('default', [ 'test:api', 'test:task', 'test:hook' ])
 
-  command('api', 'mocha test/api.js')
-  command('task', 'mocha test/task.js')
-  command('hook', 'mocha test/hook.js')
+  command('api' , 'mocha test/api.js' , { async: true })
+  command('task', 'mocha test/task.js', { async: true })
+  command('hook', 'mocha test/hook.js', { async: true })
 })
