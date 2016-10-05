@@ -27,11 +27,14 @@ task('bar', { async: true }, function() {
 })
 
 // If something went wrong, you can call this.fail()
-
+task('baz', function() {
+  if (1+1 === 0) {
+    this.fail( 'Bad result' )
+  }
+})
 
 // By default prerequisites are executed in serie,
 // but you can specified to be executed in parallel
-// with preReqSequence setted to options
 task('baz', [ 'foo', 'bar' ], { preReqSequence: 'parallel' })
 ```
 
@@ -104,7 +107,7 @@ namespace('foo', function() {
 ```
 
 ```
-wk --tasks
+wk -T
 
 > wk foo:bar
 ```
@@ -119,7 +122,7 @@ namespace('foo', function() {
 ```
 
 ```
-wk --tasks
+wk -T
 
 > wk foo
 > wk foo:bar
@@ -159,7 +162,7 @@ Exemple with a `package.json` file :
 `message:foo` is a namespaced task. A `message` namespace is created.
 
 ```
-wk --tasks
+wk -T
 
 >  wk hello          # [npm] echo 'Hello World'
 >  wk message:foo    # [npm] echo 'Foo'
@@ -185,7 +188,7 @@ wk.load('message.js', true)
 ```
 
 ```
-wk --tasks
+wk -T
 
 >  wk message:hello    # Hello World
 ```
@@ -193,3 +196,7 @@ wk --tasks
 ## `wk.run(task)`
 
 Run a task
+
+## `wk.extra`
+
+Load extra functions
