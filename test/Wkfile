@@ -51,3 +51,25 @@ task('task_param', function( name ) {
   name = name || this.argv.who
   return "Hello "+name+"!"
 })
+
+
+
+
+// Hook
+const hook = wk.extra('hook')
+
+namespace('hook', function() {
+
+  task('task0', function() {
+    return this.path
+  })
+
+  hook('pre-task0', function() {
+    return this.path
+  })
+
+  hook('post-task0', function() {
+    return this.path
+  })
+
+})
