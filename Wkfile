@@ -1,7 +1,5 @@
 'use strict'
 
-// wk.load('./lib/tasks/release', true)
-
 namespace('test', function() {
   task('default', [ 'test:api', 'test:task', 'test:hook' ])
 
@@ -12,7 +10,4 @@ namespace('test', function() {
 
 
 const publishTask = wk.extra('publish-task')
-
-publishTask('deploy', function() {
-
-})
+publishTask('deploy', function() {})
