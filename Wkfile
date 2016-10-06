@@ -1,6 +1,6 @@
 'use strict'
 
-wk.load('./lib/tasks/release', true)
+// wk.load('./lib/tasks/release', true)
 
 namespace('test', function() {
   task('default', [ 'test:api', 'test:task', 'test:hook' ])
@@ -8,4 +8,11 @@ namespace('test', function() {
   command('api' , 'mocha test/api.js' , { async: true })
   command('task', 'mocha test/task.js', { async: true })
   command('hook', 'mocha test/hook.js', { async: true })
+})
+
+
+const publishTask = wk.extra('publish-task')
+
+publishTask('deploy', function() {
+
 })
