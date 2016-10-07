@@ -1,6 +1,6 @@
 # Workflow CLI
 
-Workflow CLI inspired from [Jake.js](https://github.com/jakejs/jake)
+Task runner inspired by [Jake.js](https://github.com/jakejs/jake)
 
 # Parameters
 

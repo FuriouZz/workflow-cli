@@ -1,7 +1,7 @@
 {
   "name": "workflow-cli",
   "version": "0.7.7-beta.0",
-  "description": "Workflow CLI inspired from Jake.js",
+  "description": "Task runner inspired by Jake.js",
   "main": "lib/index.js",
   "bin": {
     "wk": "./bin/cli.js"
@@ -18,5 +18,13 @@
   "devDependencies": {
     "eslint": "^3.5.0",
     "mocha": "^3.0.2"
+  },
+  "homepage": "https://github.com/FuriouZz/workflow-cli",
+  "bugs": {
+    "url": "https://github.com/FuriouZz/workflow-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FuriouZz/workflow-cli"
   }
 }
