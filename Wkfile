@@ -8,10 +8,6 @@ namespace('test', function() {
   command('hook', 'mocha test/hook.js', { async: true })
 })
 
-
-const publishTask = wk.extra('publish-task')
-publishTask('deploy', function() {})
-
 const packageTask = wk.extra('package-task')
 packageTask('delivery', function() {
 
@@ -20,5 +16,17 @@ packageTask('delivery', function() {
   this.filelist.include('./test/**/*')
   this.filelist.include('./package.json')
   this.filelist.include('./Wkfile')
+
+})
+
+const publishTask = wk.extra('publish-task')
+publishTask('deploy', function() {
+  this.remote = 'origin'
+
+  task('postcommit', { async: true }, function() {
+    const version = wk.Tasks['deploy:next_version'].value
+    wk.Tasks['delivery'].packagePath += version
+    wk.run('delivery').catch(this.fail).done(this.complete)
+  })
 
 })
