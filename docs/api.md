@@ -54,6 +54,8 @@ task('baz', [ 'foo', 'bar' ], { preReqSequence: 'parallel' })
 
 **options.action** (Default: null) - Function called by the task
 
+**options.always_run** (Default: false) - Reenable the task when called
+
 ### Passing values through tasks
 
 ```
