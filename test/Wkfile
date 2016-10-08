@@ -23,7 +23,7 @@ task('task_async', { async: true }, function() {
 
   setTimeout(function() {
     scope.complete(scope.path+':complete')
-  }, 500)
+  }, 20)
 
   return this.path+':incomplete'
 })
@@ -38,7 +38,7 @@ task('task_sync_async', { async: false }, function() {
 
   setTimeout(function() {
     scope.complete(scope.path+':complete')
-  }, 2000)
+  }, 10)
 
   return this.path+':incomplete'
 })
