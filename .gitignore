@@ -9,3 +9,4 @@ public/main.js
 public/vendor.js
 tmp
 .idea
+pkg/*
