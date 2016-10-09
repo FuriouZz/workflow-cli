@@ -1,6 +1,6 @@
 {
   "name": "workflow-cli",
-  "version": "0.7.7-beta.0",
+  "version": "0.7.7-beta.1",
   "description": "Task runner inspired by Jake.js",
   "main": "lib/index.js",
   "bin": {
