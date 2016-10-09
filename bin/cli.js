@@ -1,10 +1,7 @@
 #!/usr/bin/env node
 
-const wk  = require('./../lib/workflow.js')
-global.wk = wk
-
+const wk        = require('./../lib/workflow.js')
 const Command   = require('./../lib/command')
-const API       = require('./../lib/api')
 const ARGParser = require('./../lib/arg-parser')
 
 // Parse arguments
@@ -12,7 +9,7 @@ wk.PARAMS = ARGParser.parse(process.argv.slice(2))
 wk.ARGV   = wk.PARAMS.__
 
 // Check no global property overrided
-const API_KEYS = Object.keys(API)
+const API_KEYS = Object.keys(wk.api)
 
 for (const i in API_KEYS) {
   if (global.hasOwnProperty(API_KEYS[i])) {
@@ -21,7 +18,7 @@ for (const i in API_KEYS) {
 }
 
 // Export API to global
-Object.assign(global, API)
+Object.assign(global, wk.api)
 
 // Load Wkfile
 wk.load(wk.PARAMS.file)
