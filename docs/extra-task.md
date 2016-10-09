@@ -2,6 +2,10 @@
 
 `ExtraTask` is a namespace with a set of tasks created for a specific purpose. `PublishTask` and `PackageTask` are two `ExtraTask`s.
 
+- [PublishTask](#publishtask)
+- [PackageTask](#packagetask)
+- [Create your own ExtraTask](#create-my-own-extratask)
+
 # PublishTask
 
 `PublishTask` can be use to bump a version like `npm version`.

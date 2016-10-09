@@ -2,6 +2,25 @@
 
 Workflow-CLI comes with a set of functions that can be used in your `js` file. API functions are setted in node `global` object and others functions or object in `global.wk` object.
 
+- [desc](#descstring)
+- [task](#taskname-prerequisites-options-action)
+  - [Options](#options)
+  - [Passing values through tasks](#passing-values-through-tasks)
+  - [Execution and hooks](#execution-and-hooks)
+- [command](#commandname-prerequisites-options-command)
+- [namespace](#namespacename-fn)
+- [serie](#serietasks)
+- [parallel](#paralleltasks)
+- [fail](#fail)
+- [wk object](#wk-object)
+  - [wk.load](#wkloadpath-createnamespace)
+  - [wk.run](#wkrun)
+  - [wk.extra](#wkextra)
+  - [wk.exec](#wkexec)
+  - [wk.ExtraTask](#wkextratask)
+  - [wk.Print](#wkprint)
+  - [wk.ARGParser](#wkargparser)
+
 ## `desc(string)`
 
 Prepare a description for the next task created.
@@ -104,7 +123,7 @@ task('task0', function() {
   console.log('task0')
 })
 
-// always_run will reenable the task automaticly
+// always_run will reenable the task automatically
 task('task1', [ 'task0' ], { always_run: true }, function() {
   console.log('task1')
 })
@@ -140,7 +159,7 @@ Create a new task that execute a command line
 command('hello', 'echo "Hello World"')
 ```
 
-## `namespace`
+## `namespace(name, fn)`
 
 `namespace` create a group and return a `Namespace` object.
 
