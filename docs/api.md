@@ -1,13 +1,14 @@
 # API
 
+Workflow-CLI comes with a set of functions that can be used in your `js` file. API functions are setted in node `global` object and others functions or object in `global.wk` object.
+
 ## `desc(string)`
 
-Prepare a description for the next task
+Prepare a description for the next task created.
 
 ## `task(name[, prerequisites, options, action])`
 
-Create a new task with a `name`.
-If `prerequisites` are specified, it will be executed before the task.
+Create a new task with a `name` and return the `Task` object.
 
 Exemple :
 
@@ -32,7 +33,11 @@ task('baz', function() {
     this.fail( 'Bad result' )
   }
 })
+```
 
+`prerequisites` is an array of tasks executed before a task.
+
+```js
 // By default prerequisites are executed in serie,
 // but you can specified to be executed in parallel
 task('baz', [ 'foo', 'bar' ], { preReqSequence: 'parallel' })
@@ -54,7 +59,7 @@ task('baz', [ 'foo', 'bar' ], { preReqSequence: 'parallel' })
 
 **options.action** (Default: null) - Function called by the task
 
-**options.always_run** (Default: false) - Reenable the task when called
+**options.always_run** (Default: false) - Reenable the task and its prerequisites.
 
 ### Passing values through tasks
 
@@ -73,56 +78,63 @@ task('task1', { async: true } function() {
 
 task('task2', [ 'task0', 'task1' ], function() {
   console.log( wk.Tasks['task0'].value )
-  // Print "task0"
+  // => "task0"
 
   console.log( wk.Tasks['task1'].value )
-  // Print "task1"
+  // => "task1"
 })
 ```
 
 ### Execution and hooks
 
-You can execute a task thanks to `wk.run` method. This method will execute the task and its prerequisites.
+You got three ways to execute a task :
 
-Moreover, you can create hook tasks with the prefix `pre` or `post`.
+* Use `execute` method to execute the task only.
+
+* Use `invoke` method to execute the task with prerequisites.
+
+* Use `wk.run` function to `invoke` a task and invoke its hooks.
+
+**Warning** — A task is executed only once. You **MUST** call `reenable` method to execute it again or add `always_run` in task options.
+
+Example:
 
 ```js
-
 task('task0', function() {
   console.log('task0')
 })
 
-task('pretask0', function() {
-  console.log('pretask0')
+// always_run will reenable the task automaticly
+task('task1', [ 'task0' ], { always_run: true }, function() {
+  console.log('task1')
 })
 
-task('posttask0', function() {
-  console.log('posttask0')
+task('pretask1', function() {
+  console.log('pretask1')
 })
 
-wk.run('task0')
+task('posttask1', function() {
+  console.log('posttask1')
+})
 
-// Print "pretask0" "task0" "posttask0"
 
+wk.Tasks['task1'].execute()
+// => "task1"
+
+wk.Tasks['task1'].invoke()
+// => "task0"
+// => "task1"
+
+wk.run('task1')
+// => "pretask1"
+// => "task0"
+// => "task1"
+// => "posttask1"
 ```
-
-
-### `execute`, `invoke`, `reenable`
-
-You can access to a task in `wk.Tasks` and execute it with two methods : `execute` or `invoke`.
-
-Use `invoke` to execute the task with prerequisites.
-
-Use `execute` to execute the task only.
-
-A task is executed only once. You can reenable it with `wk.Tasks[taskname].reenable()`.
-
-If you want to execute hooks, you must use `wk.run`
-
 
 ## `command(name[, prerequisites, options, command])`
 
-Create a new task from a command line
+Create a new task that execute a command line
 
 ```js
 command('hello', 'echo "Hello World"')
@@ -130,7 +142,7 @@ command('hello', 'echo "Hello World"')
 
 ## `namespace`
 
-Namespace are used to group a set of tasks.
+`namespace` create a group and return a `Namespace` object.
 
 ```js
 namespace('foo', function() {
@@ -160,6 +172,8 @@ wk -T
 > wk foo:bar
 ```
 
+**Warning** — You cannot create hooks for `default` task. If you want to create hooks in the example above, you can create `prefoo` and `postfoo` tasks outside of the namespace.
+
 ## `serie(...tasks)`
 
 Execute tasks in `serie`
@@ -172,7 +186,7 @@ Execute tasks in `parallel`
 
 Execute an error
 
-## `wk`
+## `wk` object
 
 ## `wk.load(path[, createNamespace])`
 
@@ -181,14 +195,10 @@ Execute an error
 Exemple with a `package.json` file :
 
 ```json
-// Inside package.json
-
-...
 "scripts": {
   "hello": "echo 'Hello World'",
   "message:foo": "echo 'Foo'"
 }
-...
 ```
 
 `message:foo` is a namespaced task. A `message` namespace is created.
@@ -204,31 +214,99 @@ The `createNamespace` argument is optional. If `true`, a new namespace is create
 
 Example :
 
-```
-// Inside `message.js`
-
+```js
+// Inside "message.js"
 desc('Log "Hello World"')
 task('hello', function() {
   console.log('Hello World')
 })
+
+// Inside "tasks/assets/index.js"
+desc('Compile assets')
+task('compile', function() {
+  console.log('compile assets')
+})
 ```
 
-```
+```js
 // Inside `Wkfile`
-
-wk.load('message.js', true)
+wk.load('./message.js', true)   // File name is the namespace
+wk.load('./tasks/assets', true) // Directory name is the namespace
 ```
 
 ```
 wk -T
 
->  wk message:hello    # Hello World
+> wk message:hello      # Hello World
+> wk assets:compile     # Compile assets
 ```
 
-## `wk.run(task)`
+## `wk.run`
 
-Run a task
+See [Execution and hooks](#execution-and-hooks)
 
 ## `wk.extra`
 
-Load extra functions
+Useful function used to load `ExtraTask` like `PublishTask` or `PackageTask`. These tasks are not inject in the `global` object by default.
+
+More information in [ExtraTask](extra-task.md#extra-task)
+
+## `wk.exec`
+
+Execute a command line
+
+## `wk.ExtraTask`
+
+More information in [ExtraTask](extra-task.md#extra-task)
+
+## `wk.Print`
+
+You can use the `Print` object to log data. To use your own options, call `Print.new()` to create a new `Print` object.
+
+By default `Print` has four differents log level : `Print.log`, `Print.debug`, `Print.warn`, `Print.error`.
+
+You can create your own level with `Print.level`
+
+```js
+Print.level('test', {
+  style: 'cyan'
+})
+
+Print.test('My test')
+// => "My test"
+```
+
+You can create your own plugin with `Print.plugin` and use it with your level. Each plugin created comes with a boolean property `use_`.
+
+```js
+// In the example above, "test" level use the style plugin to print string in cyan.
+Print.plugin('style', function(str, style) {
+  return this[style]( str )
+}, false)
+
+Print.use_style = true
+```
+
+You can set the visibility of each level.
+
+```js
+// No log printed
+Print.silent()
+
+// Only "test" level printed
+Print.visibility('test', true)
+
+// All logs printed
+Print.verbose()
+
+// Only "debug" level is not printed
+Print.visibility('debug', false)
+```
+
+More information [lib/print.js](../lib/print.js)
+
+## `wk.ARGParser`
+
+Parser used to parse command line arguments.
+
+More information [lib/arg-parser.js](../lib/arg-parser.js) and [lib/config/parameters.js](../lib/config/parameters.js)
