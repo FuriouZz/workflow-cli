@@ -19,4 +19,4 @@ Task runner inspired by [Jake.js](https://github.com/jakejs/jake)
 
 - [Command line](docs/cli.md#cli)
 - [API](docs/api.md#api)
-- [Extra](docs/extra.md#extra)
+- [ExtraTask](docs/extra.md#extra-task)
