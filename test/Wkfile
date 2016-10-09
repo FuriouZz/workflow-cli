@@ -71,3 +71,15 @@ namespace('hook', function() {
   })
 
 })
+
+
+// Error
+task('error0', { async: true }, function() {
+  this.fail('Error0')
+  this.value = 'error0'
+})
+
+task('error1', { async: true }, function() {
+  this.fail('Error1', false)
+  this.value = 'error1'
+})

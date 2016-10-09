@@ -1,8 +1,8 @@
 'use strict'
 
-process.argv.push('--no-help')
-require('../bin/cli.js')
+const wk = require('../lib/workflow')
 wk.load('./test/Wkfile')
+// wk.Print.silent()
 
 // wk.Print.visibility('debug', true)
-// wk.Print.verbose()
+wk.Print.verbose()
