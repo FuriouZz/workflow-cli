@@ -1,5 +1,8 @@
 'use strict'
 
+const publishTask = wk.extra('publish-task')
+const packageTask = wk.extra('package-task')
+
 namespace('test', function() {
   task('default', [ 'test:api', 'test:task', 'test:hook' ])
 
@@ -9,16 +12,23 @@ namespace('test', function() {
 })
 
 
-const publishTask = wk.extra('publish-task')
-publishTask('deploy', function() {})
-
-const packageTask = wk.extra('package-task')
-packageTask('delivery', function() {
+const deliveryTask = packageTask('delivery', function() {
 
   this.filelist.include('./bin/**/*')
   this.filelist.include('./lib/**/*')
   this.filelist.include('./test/**/*')
   this.filelist.include('./package.json')
   this.filelist.include('./Wkfile')
+
+})
+
+publishTask('deploy', function() {
+  this.remote = 'origin'
+
+  task('postcommit', { async: true, visible: false }, function() {
+    const version = wk.Tasks['deploy:next_version'].value
+    deliveryTask.packagePath += `-${version}`
+    wk.run('delivery').catch(this.fail).done(this.complete)
+  })
 
 })
