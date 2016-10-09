@@ -2,17 +2,29 @@
 
 Execute the task `mytask`
 
-`wk mytask`
+```sh
+wk mytask
+```
 
 From the namespace `mynamespace`
 
-`wk mynamespace:mytask`
+```sh
+wk mynamespace:mytask
+```
 
 Pass arguments
 
-`wk hello -- [ World ]` or `wk hello -- World`
-
+```sh
+wk hello -- [ World ]
 ```
+
+or
+
+```sh
+wk hello -- World
+```
+
+```js
 task('hello', function( message ) {
   console.log('Hello ' + message + '!')
   // Print "Hello World!"
@@ -21,9 +33,11 @@ task('hello', function( message ) {
 
 Pass variable
 
-`wk hello -- [ --who Jack ]`
-
+```sh
+wk hello -- [ --who Jack ]
 ```
+
+```js
 task('hello', function() {
   console.log('Hello ' + this.argv.who + '!')
   // Print "Hello Jack!"

@@ -11,7 +11,7 @@ If `prerequisites` are specified, it will be executed before the task.
 
 Exemple :
 
-```
+```js
 task('foo', function() {
   console.log('Foo')
 })
@@ -58,7 +58,7 @@ task('baz', [ 'foo', 'bar' ], { preReqSequence: 'parallel' })
 
 ### Passing values through tasks
 
-```
+```js
 task('task0', function() {
   return 'task0'
 })
@@ -86,7 +86,7 @@ You can execute a task thanks to `wk.run` method. This method will execute the t
 
 Moreover, you can create hook tasks with the prefix `pre` or `post`.
 
-```
+```js
 
 task('task0', function() {
   console.log('task0')
@@ -102,7 +102,7 @@ task('posttask0', function() {
 
 wk.run('task0')
 
-// "pretask0" "task0" "posttask0"
+// Print "pretask0" "task0" "posttask0"
 
 ```
 
@@ -124,7 +124,7 @@ If you want to execute hooks, you must use `wk.run`
 
 Create a new task from a command line
 
-```
+```js
 command('hello', 'echo "Hello World"')
 ```
 
@@ -132,13 +132,13 @@ command('hello', 'echo "Hello World"')
 
 Namespace are used to group a set of tasks.
 
-```
+```js
 namespace('foo', function() {
   task('bar')
 })
 ```
 
-```
+```sh
 wk -T
 
 > wk foo:bar
@@ -146,14 +146,14 @@ wk -T
 
 You can set a default task associated to a namespace
 
-```
+```js
 namespace('foo', function() {
   task('default', [ 'bar' ])
   task('bar')
 })
 ```
 
-```
+```sh
 wk -T
 
 > wk foo
@@ -180,7 +180,7 @@ Execute an error
 
 Exemple with a `package.json` file :
 
-```
+```json
 // Inside package.json
 
 ...
@@ -193,7 +193,7 @@ Exemple with a `package.json` file :
 
 `message:foo` is a namespaced task. A `message` namespace is created.
 
-```
+```sh
 wk -T
 
 >  wk hello          # [npm] echo 'Hello World'

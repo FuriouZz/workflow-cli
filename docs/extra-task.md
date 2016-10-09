@@ -104,7 +104,7 @@ customTask('hello', function() {
 
 `CLI`
 
-```bash
+```sh
 wk -T
 
 > wk hello
