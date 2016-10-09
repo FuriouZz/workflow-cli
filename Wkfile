@@ -14,20 +14,28 @@ namespace('test', function() {
 
 const deliveryTask = packageTask('delivery', function() {
 
+  this.name = 'workflow-cli'
+
   this.filelist.include('./bin/**/*')
   this.filelist.include('./lib/**/*')
   this.filelist.include('./test/**/*')
   this.filelist.include('./package.json')
   this.filelist.include('./Wkfile')
+  this.filelist.include('./README.md')
+
+  this.targets = [ 'gzip' ]
 
 })
 
 publishTask('deploy', function() {
   this.remote = 'origin'
+  const scope = this
 
-  task('postcommit', { async: true, visible: false }, function() {
-    const version = wk.Tasks['deploy:next_version'].value
-    deliveryTask.packagePath += `-${version}`
+  task('postcommit', [ 'deploy:delivery' ], { visible: false })
+
+  task('delivery', { async: true }, function() {
+    const version = scope.getCurrentVersion()
+    deliveryTask.name = `${deliveryTask.name}-${version}`
     wk.run('delivery').catch(this.fail).done(this.complete)
   })
 
