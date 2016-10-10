@@ -13,20 +13,20 @@ describe('Default', function() {
     wk.run('action_later')
   })
 
-  it('must fail', function( done ) {
-    wk.run('task_fail').catch(function(e) {
-      assert.throws(
-        () => { throw e },
-        (err) => {
-          if (err instanceof Error && /fail/.test(err)) {
-            return true
-          }
-          return false
-        }
-      )
-      done()
-    })
-  })
+  // it('must fail', function( done ) {
+  //   wk.run('task_fail').catch(function(e) {
+  //     assert.throws(
+  //       () => { throw e },
+  //       (err) => {
+  //         if (err instanceof Error && /fail/.test(err)) {
+  //           return true
+  //         }
+  //         return false
+  //       }
+  //     )
+  //     done()
+  //   })
+  // })
 
 })
 
@@ -163,4 +163,27 @@ describe('With parameters', function() {
 
   })
 
+})
+
+
+describe('Errors', function() {
+  it('must throw', function() {
+
+    assert.throws(
+      () => {
+        wk.run('error0')
+      },
+      Error
+    )
+
+  })
+
+  it('must be catched and finish operation', function( done ) {
+
+    wk.run('error1').catch(function() {
+      assert.equal(wk.Tasks['error1'].value, 'error1')
+      done()
+    })
+
+  })
 })

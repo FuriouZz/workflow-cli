@@ -9,7 +9,6 @@ namespace('test', function() {
   command('api' , 'mocha test/api.js' , { async: true })
   command('task', 'mocha test/task.js', { async: true })
   command('hook', 'mocha test/hook.js', { async: true })
-  command('error', 'mocha test/error.js', { async: true })
 })
 
 
