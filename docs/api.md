@@ -80,6 +80,13 @@ task('baz', [ 'foo', 'bar' ], { preReqSequence: 'parallel' })
 
 **options.always_run** (Default: false) - Reenable the task and its prerequisites.
 
+**options.breakOnError** (Default: true) - Throw an error when `this.fail` is called.
+
+### Async
+
+When `options.async` is `true`, you **MUST** call `this.complete` or `this.fail`. You can pass a value to `this.complete` and a message to `this.fail`.
+`this.fail` has a second argument to break execution on error.
+
 ### Passing values through tasks
 
 ```js
