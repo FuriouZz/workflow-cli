@@ -6,9 +6,9 @@ const packageTask = wk.extra('package-task')
 namespace('test', function() {
   task('default', [ 'test:api', 'test:task', 'test:hook' ])
 
-  command('api' , 'mocha test/api.js --color' , { async: true })
-  command('task', 'mocha test/task.js --color', { async: true })
-  command('hook', 'mocha test/hook.js --color', { async: true })
+  command('api' , 'mocha test/api.js --color' , { async: true, process: { printStdout: true } })
+  command('task', 'mocha test/task.js --color', { async: true, process: { printStdout: true } })
+  command('hook', 'mocha test/hook.js --color', { async: true, process: { printStdout: true } })
 })
 
 
