@@ -14,7 +14,8 @@ namespace('test', function() {
 
 const deliveryTask = packageTask('delivery', function() {
 
-  this.name = 'workflow-cli'
+  const version = require('./package.json').version
+  this.name = `workflow-cli-${version}`
 
   this.filelist.include('./bin/**/*')
   this.filelist.include('./lib/**/*')
