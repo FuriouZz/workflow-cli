@@ -40,3 +40,13 @@ publishTask('deploy', function() {
   })
 
 })
+
+
+
+// const ps = wk.createExec('node test/test_exec.js', { printStdout: false, printStderr: false, breakOnError: false })
+
+// ps.on('end', function(err, stdout, stderr) {
+//   console.log( stdout )
+// })
+
+// ps.execute()
