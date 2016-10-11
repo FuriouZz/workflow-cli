@@ -111,18 +111,17 @@ More information in [ExtraTask](extra-task.md#extra-task)
 
 Execute a command or a list of command. Use same options as [command()](api.md#commandname-prerequisites-options-command).
 
+`wk.exec` returns a promise.
+
 ```js
-// Return a ProcessExec object
 wk.exec('echo Hello World', { printStdout: true })
 
-// Return a promise
 wk.exec([
   'echo foo',
   'echo bar',
   'echo baz'
 ])
 
-// Set options to each command
 wk.exec([
   {
     command: 'git status',

@@ -29,6 +29,7 @@ const deliveryTask = packageTask('delivery', function() {
 })
 
 publishTask('deploy', function() {
+
   this.remote = 'origin'
   const scope = this
 
