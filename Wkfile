@@ -36,7 +36,7 @@ publishTask('deploy', function() {
 
   task('delivery', { async: true }, function() {
     const version = scope.getCurrentVersion()
-    deliveryTask.name = `${deliveryTask.name}-${version}`
+    deliveryTask.name = `workflow-cli-${version}`
     wk.run('delivery').catch(this.fail).done(this.complete)
   })
 
