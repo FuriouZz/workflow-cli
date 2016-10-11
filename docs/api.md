@@ -13,17 +13,29 @@ Workflow-CLI comes with a set of functions that can be used in your `js` file. A
 - [parallel](#paralleltasks)
 - [fail](#fail)
 - [wk object](#wk-object)
-  - [wk.load](#wkloadpath-createnamespace)
-  - [wk.run](#wkrun)
-  - [wk.extra](#wkextra)
-  - [wk.exec](#wkexec)
-  - [wk.ExtraTask](#wkextratask)
-  - [wk.Print](#wkprint)
-  - [wk.ARGParser](#wkargparser)
+
+
+
+
+
+
+
+
+
+
 
 ## `desc(string)`
 
 Prepare a description for the next task created.
+
+
+
+
+
+
+
+
+
 
 ## `task(name[, prerequisites, options, action])`
 
@@ -64,6 +76,15 @@ task('baz', [ 'foo', 'bar' ], { preReqSequence: 'parallel' })
 
 **Note: If `prerequisites` are executed in `serie` but a task has async option setted to `false`, the complete function will be executed at task execution.**
 
+
+
+
+
+
+
+
+
+
 ### Options
 
 **options.async** (Default: false) — Precise that task is asynchronous. You **MUST** call `this.complete` or `this.fail` to complete the task.
@@ -82,10 +103,28 @@ task('baz', [ 'foo', 'bar' ], { preReqSequence: 'parallel' })
 
 **options.breakOnError** (Default: true) - Throw an error when `this.fail` is called.
 
+
+
+
+
+
+
+
+
+
 ### Async
 
 When `options.async` is `true`, you **MUST** call `this.complete` or `this.fail`. You can pass a value to `this.complete` and a message to `this.fail`.
 `this.fail` has a second argument to break execution on error.
+
+
+
+
+
+
+
+
+
 
 ### Passing values through tasks
 
@@ -110,6 +149,15 @@ task('task2', [ 'task0', 'task1' ], function() {
   // => "task1"
 })
 ```
+
+
+
+
+
+
+
+
+
 
 ### Execution and hooks
 
@@ -158,13 +206,60 @@ wk.run('task1')
 // => "posttask1"
 ```
 
-## `command(name[, prerequisites, options, command])`
+
+
+
+
+
+
+
+
+
+## `command(name, command[, prerequisites, options, callback])`
 
 Create a new task that execute a command line
 
 ```js
 command('hello', 'echo "Hello World"')
+
+command('ls-remote', 'git ls-remote', function(err, stdout, stderr) {
+  this.complete()
+}, { async: true })
 ```
+
+
+
+
+
+
+
+
+
+
+### Command options
+
+**options.process.use_color** (Default: true) Display child process color
+
+**options.process.breakOnError** (Default: true) - Throw an error when `this.fail` is called.
+
+**options.process.interactive** (Default: false)
+
+**options.process.printStdout** (Default: true)  Print `stdout`
+
+**options.process.printStderr** (Default: true) Print `stderr`
+
+**options.process.preferExec** (Default: false) Use `child_process.exec` instead of `child_process.spawn`
+
+**Warning** When `printStdout` or `printStderr` option is `true`, `stdout` or `stderr` returns `undefined`
+
+
+
+
+
+
+
+
+
 
 ## `namespace(name, fn)`
 
@@ -200,139 +295,54 @@ wk -T
 
 **Warning** — You cannot create hooks for `default` task. If you want to create hooks in the example above, you can create `prefoo` and `postfoo` tasks outside of the namespace.
 
+
+
+
+
+
+
+
+
+
 ## `serie(...tasks)`
 
 Execute tasks in `serie`
+
+
+
+
+
+
+
+
+
 
 ## `parallel(...tasks)`
 
 Execute tasks in `parallel`
 
+
+
+
+
+
+
+
+
+
 ## `fail`
 
 Execute an error
 
+
+
+
+
+
+
+
+
+
 ## `wk` object
 
-## `wk.load(path[, createNamespace])`
-
-`wk.load` can be used to load a file, a directory or a `package.json` file.
-
-Exemple with a `package.json` file :
-
-```json
-"scripts": {
-  "hello": "echo 'Hello World'",
-  "message:foo": "echo 'Foo'"
-}
-```
-
-`message:foo` is a namespaced task. A `message` namespace is created.
-
-```sh
-wk -T
-
->  wk hello          # [npm] echo 'Hello World'
->  wk message:foo    # [npm] echo 'Foo'
-```
-
-The `createNamespace` argument is optional. If `true`, a new namespace is created based on the basename of the path.
-
-Example :
-
-```js
-// Inside "message.js"
-desc('Log "Hello World"')
-task('hello', function() {
-  console.log('Hello World')
-})
-
-// Inside "tasks/assets/index.js"
-desc('Compile assets')
-task('compile', function() {
-  console.log('compile assets')
-})
-```
-
-```js
-// Inside `Wkfile`
-wk.load('./message.js', true)   // File name is the namespace
-wk.load('./tasks/assets', true) // Directory name is the namespace
-```
-
-```
-wk -T
-
-> wk message:hello      # Hello World
-> wk assets:compile     # Compile assets
-```
-
-## `wk.run`
-
-See [Execution and hooks](#execution-and-hooks)
-
-## `wk.extra`
-
-Useful function used to load `ExtraTask` like `PublishTask` or `PackageTask`. These tasks are not inject in the `global` object by default.
-
-More information in [ExtraTask](extra-task.md#extra-task)
-
-## `wk.exec`
-
-Execute a command line
-
-## `wk.ExtraTask`
-
-More information in [ExtraTask](extra-task.md#extra-task)
-
-## `wk.Print`
-
-You can use the `Print` object to log data. To use your own options, call `Print.new()` to create a new `Print` object.
-
-By default `Print` has four differents log level : `Print.log`, `Print.debug`, `Print.warn`, `Print.error`.
-
-You can create your own level with `Print.level`
-
-```js
-Print.level('test', {
-  style: 'cyan'
-})
-
-Print.test('My test')
-// => "My test"
-```
-
-You can create your own plugin with `Print.plugin` and use it with your level. Each plugin created comes with a boolean property `use_`.
-
-```js
-// In the example above, "test" level use the style plugin to print string in cyan.
-Print.plugin('style', function(str, style) {
-  return this[style]( str )
-}, false)
-
-Print.use_style = true
-```
-
-You can set the visibility of each level.
-
-```js
-// No log printed
-Print.silent()
-
-// Only "test" level printed
-Print.visibility('test', true)
-
-// All logs printed
-Print.verbose()
-
-// Only "debug" level is not printed
-Print.visibility('debug', false)
-```
-
-More information [lib/print.js](../lib/print.js)
-
-## `wk.ARGParser`
-
-Parser used to parse command line arguments.
-
-More information [lib/arg-parser.js](../lib/arg-parser.js) and [lib/config/parameters.js](../lib/config/parameters.js)
+See [wk object](docs/wk-object.md#wk-object) documentation

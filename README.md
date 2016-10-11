@@ -47,3 +47,4 @@ wk --help
 - [Command line](docs/cli.md#cli)
 - [API](docs/api.md#api)
 - [ExtraTask](docs/extra-task.md#extra-task)
+- [wk object](docs/wk-object.md#wk-object)
