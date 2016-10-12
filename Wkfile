@@ -26,7 +26,16 @@ const deliveryTask = packageTask('delivery', function() {
 
   this.targets = [ 'gzip' ]
 
+  const self = this
+
+  task('postpackage', { async: true }, function() {
+    wk.exec(`npm publish ${self.getPackagePath()}.tar.gz`)
+      .catch(this.fail)
+      .done(this.complete)
+  })
+
 })
+
 
 publishTask('deploy', function() {
 
