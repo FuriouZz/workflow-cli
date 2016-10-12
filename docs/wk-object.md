@@ -125,7 +125,7 @@ wk.exec([
 wk.exec([
   {
     command: 'git status',
-    options: { printStdout: true, breakOnError: true, preferExec: true }
+    options: { printStdout: true, breakOnError: true }
   },
   {
     command: 'git add',

@@ -248,8 +248,6 @@ command('ls-remote', 'git ls-remote', function(err, stdout, stderr) {
 
 **options.process.printStderr** (Default: true) Print `stderr`
 
-**options.process.preferExec** (Default: false) Use `child_process.exec` instead of `child_process.spawn`
-
 **Warning** When `printStdout` or `printStderr` option is `true`, `stdout` or `stderr` returns `undefined`
 
 
