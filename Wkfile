@@ -42,3 +42,29 @@ publishTask('deploy', function() {
   })
 
 })
+
+
+
+
+
+
+
+
+
+
+// const exec  = require('child_process').exec
+// const spawn = require('child_process').spawn
+
+// // const ps0 = exec('git ls-remote', Object.assign({ FORCE_COLOR: true }, process.env))
+// // ps0.on('exit', function() {
+// //   const res = Buffer.concat(ps0.stdout._readableState.buffer)
+// //   console.log('exec')
+// //   console.log(res)
+// // })
+
+// const ps1 = spawn('git', [ 'commit', '-a', '-m', '"Hello World"' ], Object.assign({ FORCE_COLOR: true }, process.env))
+// ps1.on('exit', function() {
+//   const res = Buffer.concat(ps1.stdout._readableState.buffer)
+//   console.log('spawn')
+//   console.log(res.toString())
+// })
