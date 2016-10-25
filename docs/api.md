@@ -343,4 +343,4 @@ Execute an error
 
 ## `wk` object
 
-See [wk object](docs/wk-object.md#wk-object) documentation
+See [wk object](wk-object.md#wk-object) documentation
