@@ -12,7 +12,7 @@ namespace('test', function() {
 })
 
 
-const deliveryTask = packageTask('delivery', function() {
+packageTask('pkg', function() {
 
   const version = require('./package.json').version
   this.name = `workflow-cli-${version}`
@@ -28,7 +28,7 @@ const deliveryTask = packageTask('delivery', function() {
 
   const self = this
 
-  task('postpackage', { async: true, visible: false }, function() {
+  task('publish', { async: true, visible: true }, function() {
     wk.exec(`npm publish ${self.getPackagePath()}.tar.gz`)
       .catch(this.fail)
       .done(this.complete)
@@ -38,16 +38,5 @@ const deliveryTask = packageTask('delivery', function() {
 
 
 publishTask('deploy', function() {
-
   this.remote = 'origin'
-  const scope = this
-
-  task('postcommit', [ 'deploy:delivery' ], { visible: false })
-
-  task('delivery', { async: true, visible: false }, function() {
-    const version = scope.getCurrentVersion()
-    deliveryTask.name = `workflow-cli-${version}`
-    wk.run('delivery').catch(this.fail).done(this.complete)
-  })
-
 })
