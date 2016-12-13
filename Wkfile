@@ -40,3 +40,8 @@ packageTask('pkg', function() {
 publishTask('deploy', function() {
   this.remote = 'origin'
 })
+
+
+task('task0', function(firstname, lastname) {
+  console.log(firstname, lastname)
+})
