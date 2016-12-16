@@ -6,19 +6,150 @@ const Command   = require('./../lib/command')
 const ARGParser  = require('./../lib/arg-parser')
 const ARGConfig = require('./../lib/config/parameters')
 
-const p = ARGParser.splitParameters( process.argv.slice(2), ARGConfig )
+ARGParser._createHelp( ARGConfig )
+const ARGV = ARGParser.getContextAndCommandARGV( process.argv.slice(2), ARGConfig )
 
-// Parse arguments
-wk.PARAMS = ARGParser.parse(p.wkParameters, ARGConfig)
-wk.ARGV   = wk.PARAMS.__
+wk.CONTEXT_ARGV   = ARGV.context
+wk.CONTEXT_PARAMS = ARGParser.parse(wk.CONTEXT_ARGV, ARGConfig)
 
-if (p.taskParameters) {
-  wk.ARGV._.push( p.taskParameters[0] )
-  wk.ARGV[p.taskParameters[0]+'_argv'] = p.taskParameters.slice(1)
+wk.COMMAND_ARGV   = ARGV.command
+wk.COMMAND_PARAMS = ARGParser.parse(wk.COMMAND_ARGV)
+// console.log(wk.COMMAND_PARAMS)
+// Load Wkfile
+wk.load(wk.CONTEXT_PARAMS.file)
+
+// Prepare command execution
+const pad            = require('./../lib/utils/string').pad
+const Print          = require('./../lib/print')
+const parameters     = require('./../lib/config/parameters')
+const ProcessManager = require('./../lib/process-manager')
+const TaskManager    = require('./../lib/task-manager')
+const pkg            = require('./../package.json')
+
+
+const listTasks = function() {
+
+  let tasks = []
+
+  const getTasks = function(ns) {
+
+    const tsks = []
+
+    for (const key in ns.tasks) {
+      if (ns.tasks[key].visible)
+        tsks.push( ns.tasks[key] )
+    }
+
+    if (tsks.length > 0) {
+      if (ns.path.length === 0) tasks.push(`[default]`)
+      else tasks.push( `\n[${ns.path}]` )
+      tasks = tasks.concat(tsks)
+    }
+
+    for (const k in ns.children) {
+      getTasks(ns.children[k])
+    }
+  }
+
+  getTasks(wk.defaultNamespace)
+
+  let length = 0
+  for (const i in tasks) {
+    if (typeof tasks[i] === 'string') continue
+    if (length < tasks[i].path.length) length = tasks[i].path.length
+  }
+
+  tasks = tasks.map(function(tsk) {
+    if (typeof tsk === 'string') return tsk
+    if (!tsk.description) return 'wk ' + `${Print.green(tsk.path)}`
+
+    const path = pad(tsk.path, length + 5, ' ', true)
+    return 'wk ' + Print.green(path) + ' ' + Print.grey('# ' + tsk.description)
+  })
+
+  console.log(tasks.join('\n'))
+
 }
 
-// Load Wkfile
-wk.load(wk.PARAMS.file)
 
-// Execute command
-Command()
+const createCommands = function() {
+  const commandTask = require('../lib/extras/command-task')
+
+  commandTask('run', function() {
+
+    this.config['parallel'] = {
+      type: 'boolean',
+      default: false,
+      aliases: [ 'p' ],
+      description: 'Execute tasks in "parallel"'
+    }
+
+    wk.ARGParser._createHelp( this.config )
+
+    task('command', { visible: false }, function() {
+      const tasks = Array.from(arguments)
+
+      if (this.argv.help) {
+        console.log( this.argv.__config.help.description )
+        return
+      }
+
+      if (this.argv.parallel) {
+        parallel(tasks)
+      } else {
+        serie(tasks)
+      }
+    })
+
+  })
+}
+/**
+ * Execute command
+ */
+
+// --help -h
+if (wk.CONTEXT_PARAMS.help) {
+  console.log( `${pkg.name} v${pkg.version} \n`)
+  console.log( wk.CONTEXT_PARAMS.__config.help.description )
+  return
+}
+
+// -T --tasks
+if (wk.CONTEXT_PARAMS.tasks) {
+  return listTasks()
+}
+
+// --clean --kill
+if (wk.CONTEXT_PARAMS.clean) {
+  return ProcessManager.clean()
+}
+
+// --silent
+if (wk.CONTEXT_PARAMS.silent) {
+  Print.silent()
+}
+
+// --verbose
+else if (wk.CONTEXT_PARAMS.verbose) {
+  Print.verbose()
+}
+
+// --log=<levels>
+else {
+  Print.silent()
+  const levels = wk.CONTEXT_PARAMS.log.split(/,/)
+  if (levels.length) {
+    for (const level in levels) {
+      Print.visibility(levels[level], true)
+    }
+  }
+}
+
+// Execute a command
+if (wk.COMMAND_ARGV.length > 0) {
+  createCommands()
+  return wk.run(wk.COMMAND_ARGV[0])
+}
+
+// By default list tasks
+listTasks()

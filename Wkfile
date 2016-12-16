@@ -2,6 +2,7 @@
 
 const publishTask = wk.extra('publish-task')
 const packageTask = wk.extra('package-task')
+const commandTask = wk.extra('command-task')
 
 namespace('test', function() {
   task('default', [ 'test:api', 'test:task', 'test:hook' ])
@@ -42,6 +43,7 @@ publishTask('deploy', function() {
 })
 
 
-task('task0', function(firstname, lastname) {
-  console.log(firstname, lastname)
+task('task0', { argv: { yolo: true } }, function(firstname, lastname) {
+  // console.log(this.argv)
+  console.log('---', firstname, lastname, this.argv.yolo)
 })
