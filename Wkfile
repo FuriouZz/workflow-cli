@@ -44,6 +44,5 @@ publishTask('deploy', function() {
 
 
 task('task0', { argv: { yolo: true } }, function(firstname, lastname) {
-  // console.log(this.argv)
-  console.log('---', firstname, lastname, this.argv.yolo)
+  console.log('---', firstname, lastname, this.argv)
 })

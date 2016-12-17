@@ -147,8 +147,14 @@ else {
 
 // Execute a command
 if (wk.COMMAND_ARGV.length > 0) {
-  createCommands()
-  return wk.run(wk.COMMAND_ARGV[0])
+  const tsk = wk.COMMAND_ARGV[0]
+
+  if (tsk === 'run') createCommands()
+
+  if (wk.Tasks[tsk]) {
+    wk.Tasks[tsk].argv = Object.assign(wk.Tasks[tsk].argv, wk.COMMAND_PARAMS.__)
+    return wk.run(tsk)
+  }
 }
 
 // By default list tasks
