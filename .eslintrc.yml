@@ -13,7 +13,7 @@ rules:
 globals:
   wk: true
   task: true
-  command: true
+  taskProcess: true
   run: true
   desc: true
   namespace: true

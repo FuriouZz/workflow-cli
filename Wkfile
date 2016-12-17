@@ -2,7 +2,6 @@
 
 const publishTask = wk.extra('publish-task')
 const packageTask = wk.extra('package-task')
-const commandTask = wk.extra('command-task')
 
 namespace('test', function() {
   task('default', [ 'test:api', 'test:task', 'test:hook' ])
