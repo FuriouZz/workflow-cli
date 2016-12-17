@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const wk        = require('./../lib/workflow.js')
-const Command   = require('./../lib/command')
 
 const ARGParser  = require('./../lib/arg-parser')
 const ARGConfig = require('./../lib/config/parameters')
@@ -21,9 +20,7 @@ wk.load(wk.CONTEXT_PARAMS.file)
 // Prepare command execution
 const pad            = require('./../lib/utils/string').pad
 const Print          = require('./../lib/print')
-const parameters     = require('./../lib/config/parameters')
 const ProcessManager = require('./../lib/process-manager')
-const TaskManager    = require('./../lib/task-manager')
 const pkg            = require('./../package.json')
 
 
