@@ -109,7 +109,7 @@ More information in [ExtraTask](extra-task.md#extra-task)
 
 ## `wk.exec`
 
-Execute a command or a list of command. Use same options as [command()](api.md#commandname-prerequisites-options-command).
+Execute a command or a list of command. Use same options as [taskProcess()](api.md#commandname-prerequisites-options-command).
 
 `wk.exec` returns a promise.
 

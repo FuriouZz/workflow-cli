@@ -215,14 +215,14 @@ wk.run('task1')
 
 
 
-## `command(name, command[, prerequisites, options, callback])`
+## `taskProcess(name, command[, prerequisites, options, callback])`
 
 Create a new task that execute a command line
 
 ```js
-command('hello', 'echo "Hello World"')
+taskProcess('hello', 'echo "Hello World"')
 
-command('ls-remote', 'git ls-remote', function(err, stdout, stderr) {
+taskProcess('ls-remote', 'git ls-remote', function(err, stdout, stderr) {
   this.complete()
 }, { async: true })
 ```

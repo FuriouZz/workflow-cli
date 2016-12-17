@@ -7,9 +7,9 @@ const commandTask = wk.extra('command-task')
 namespace('test', function() {
   task('default', [ 'test:api', 'test:task', 'test:hook' ])
 
-  command('api' , 'mocha test/api.js --color' , { async: true, visible: false })
-  command('task', 'mocha test/task.js --color', { async: true, visible: false })
-  command('hook', 'mocha test/hook.js --color', { async: true, visible: false })
+  taskProcess('api' , 'mocha test/api.js --color' , { async: true, visible: false })
+  taskProcess('task', 'mocha test/task.js --color', { async: true, visible: false })
+  taskProcess('hook', 'mocha test/hook.js --color', { async: true, visible: false })
 })
 
 
