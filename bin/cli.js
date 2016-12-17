@@ -86,7 +86,7 @@ const createCommands = function() {
 
     wk.ARGParser._createHelp( this.config )
 
-    task('command', { visible: false }, function() {
+    task('command', { visible: false, async: true }, function() {
       const tasks = Array.from(arguments)
 
       if (this.argv.help) {
@@ -95,9 +95,9 @@ const createCommands = function() {
       }
 
       if (this.argv.parallel) {
-        parallel(tasks)
+        parallel(tasks).catch(this.fail).then(this.complete)
       } else {
-        serie(tasks)
+        serie(tasks).catch(this.fail).then(this.complete)
       }
     })
 
