@@ -114,11 +114,22 @@ describe('Parallel', function() {
 
 describe('With parameters', function() {
 
+  it('CLI', function( done ) {
+
+    wk.exec('../bin/cli.js task_param John', { cwd: './test', printStdout: false, printStderr: false }).then((res) => {
+      assert.equal(res.stdout, "Hello John!\n")
+      done()
+    })
+
+  })
+
 
   it('String', function( done ) {
 
-    wk.PARAMS = wk.ARGParser.parse("task_param -- John".split(' '))
-    wk.ARGV   = wk.PARAMS.__
+    // wk.PARAMS = wk.ARGParser.parse("task_param -- John".split(' '))
+    // wk.ARGV   = wk.PARAMS.__
+
+    wk.Tasks['task_param'].argv._.push('John')
 
     wk.Tasks['task_param'].reenable()
 
@@ -131,59 +142,59 @@ describe('With parameters', function() {
 
   })
 
-  it('Array', function( done ) {
+  // it('Array', function( done ) {
 
-    wk.PARAMS = wk.ARGParser.parse("task_param -- [ John ]".split(' '))
-    wk.ARGV   = wk.PARAMS.__
+  //   wk.PARAMS = wk.ARGParser.parse("task_param -- [ John ]".split(' '))
+  //   wk.ARGV   = wk.PARAMS.__
 
-    wk.Tasks['task_param'].reenable()
+  //   wk.Tasks['task_param'].reenable()
 
-    wk.Tasks['task_param'].promise.then(( value ) => {
-      assert.equal(value, "Hello John!")
-      done()
-    })
+  //   wk.Tasks['task_param'].promise.then(( value ) => {
+  //     assert.equal(value, "Hello John!")
+  //     done()
+  //   })
 
-    wk.Tasks['task_param'].invoke()
+  //   wk.Tasks['task_param'].invoke()
 
-  })
+  // })
 
-  it('Object', function( done ) {
+  // it('Object', function( done ) {
 
-    wk.PARAMS = wk.ARGParser.parse("task_param -- [ --who John ]".split(' '))
-    wk.ARGV   = wk.PARAMS.__
+  //   wk.PARAMS = wk.ARGParser.parse("task_param -- [ --who John ]".split(' '))
+  //   wk.ARGV   = wk.PARAMS.__
 
-    wk.Tasks['task_param'].reenable()
+  //   wk.Tasks['task_param'].reenable()
 
-    wk.Tasks['task_param'].promise.then(( value ) => {
-      assert.equal(value, "Hello John!")
-      done()
-    })
+  //   wk.Tasks['task_param'].promise.then(( value ) => {
+  //     assert.equal(value, "Hello John!")
+  //     done()
+  //   })
 
-    wk.Tasks['task_param'].invoke()
+  //   wk.Tasks['task_param'].invoke()
 
-  })
+  // })
 
 })
 
 
-describe('Errors', function() {
-  it('must throw', function() {
+// describe('Errors', function() {
+//   it('must throw', function() {
 
-    assert.throws(
-      () => {
-        wk.run('error0')
-      },
-      Error
-    )
+//     assert.throws(
+//       () => {
+//         wk.run('error0')
+//       },
+//       Error
+//     )
 
-  })
+//   })
 
-  it('must be catched and finish operation', function( done ) {
+//   it('must be catched and finish operation', function( done ) {
 
-    wk.run('error1').catch(function() {
-      assert.equal(wk.Tasks['error1'].value, 'error1')
-      done()
-    })
+//     wk.run('error1').catch(function() {
+//       assert.equal(wk.Tasks['error1'].value, 'error1')
+//       done()
+//     })
 
-  })
-})
+//   })
+// })

@@ -48,9 +48,9 @@ task('parallel0', [ 'task_sync', 'task_async', 'task_sync_async' ], { preReqSequ
 })
 
 task('task_param', function( name ) {
-  console.log(this.argv)
-  name = this.argv._[0]
-  return "Hello "+name+"!"
+  const res = "Hello "+name+"!"
+  console.log(res)
+  return res
 })
 
 
