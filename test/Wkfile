@@ -49,7 +49,25 @@ task('parallel0', [ 'task_sync', 'task_async', 'task_sync_async' ], { preReqSequ
 
 task('task_param', function( name ) {
   const res = "Hello "+name+"!"
-  console.log(res)
+  if (process.argv.indexOf('task_param') !== -1) {
+    console.log(res)
+  }
+  return res
+})
+
+task('task_param2', function() {
+  const res = "Hello "+this.argv.task_param2._[0]+"!"
+  if (process.argv.indexOf('task_param2') !== -1) {
+    console.log(res)
+  }
+  return res
+})
+
+task('task_param3', function() {
+  const res = "Hello "+this.argv.name+"!"
+  if (process.argv.indexOf('task_param3') !== -1) {
+    console.log(res)
+  }
   return res
 })
 
@@ -59,15 +77,22 @@ task('task_param', function( name ) {
 // Hook
 namespace('hook', function() {
 
-  task('task0', function() {
+  task('task0', {
+    hooks: {
+      pre: 'hook:task1',
+      post: ['hook:task2', function() {
+        console.log('post_function')
+      }]
+    }
+  }, function() {
     return this.path
   })
 
-  task('pretask0', function() {
+  task('task1', function() {
     return this.path
   })
 
-  task('posttask0', function() {
+  task('task2', function() {
     return this.path
   })
 
@@ -80,7 +105,7 @@ task('error0', function() {
   return 'error0'
 })
 
-task('error1', { breakOnError: false }, function() {
-  this.fail('Error1')
-  return 'error1'
-})
+// task('error1', { breakOnError: false }, function() {
+//   this.fail('Error1')
+//   return 'error1'
+// })

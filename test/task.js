@@ -114,24 +114,36 @@ describe('Parallel', function() {
 
 describe('With parameters', function() {
 
-  it('CLI', function( done ) {
+  it('[CLI] Parameter', function( done ) {
 
-    wk.exec('../bin/cli.js task_param John', { cwd: './test', printStdout: false, printStderr: false }).then((res) => {
+    wk.exec('../bin/cli.js task_param John', { cwd: './test' }).then((res) => {
       assert.equal(res.stdout, "Hello John!\n")
       done()
     })
 
   })
 
+  it('[CLI] Array', function( done ) {
 
-  it('String', function( done ) {
+    wk.exec('../bin/cli.js task_param2 -- [ John ]', { cwd: './test' }).then((res) => {
+      assert.equal(res.stdout, "Hello John!\n")
+      done()
+    })
 
-    // wk.PARAMS = wk.ARGParser.parse("task_param -- John".split(' '))
-    // wk.ARGV   = wk.PARAMS.__
+  })
+
+  it('[CLI] Optional', function( done ) {
+
+    wk.exec('../bin/cli.js task_param3 --name John', { cwd: './test' }).then((res) => {
+      assert.equal(res.stdout, "Hello John!\n")
+      done()
+    })
+
+  })
+
+  it('[Code] Parameter', function( done ) {
 
     wk.Tasks['task_param'].argv._.push('John')
-
-    wk.Tasks['task_param'].reenable()
 
     wk.Tasks['task_param'].promise.then(( value ) => {
       assert.equal(value, "Hello John!")
@@ -142,59 +154,55 @@ describe('With parameters', function() {
 
   })
 
-  // it('Array', function( done ) {
+  it('[Code] Array', function( done ) {
 
-  //   wk.PARAMS = wk.ARGParser.parse("task_param -- [ John ]".split(' '))
-  //   wk.ARGV   = wk.PARAMS.__
+    wk.Tasks['task_param2'].argv.task_param2 = {
+      _: [ 'John' ]
+    }
 
-  //   wk.Tasks['task_param'].reenable()
+    wk.Tasks['task_param2'].promise.then(( value ) => {
+      assert.equal(value, "Hello John!")
+      done()
+    })
 
-  //   wk.Tasks['task_param'].promise.then(( value ) => {
-  //     assert.equal(value, "Hello John!")
-  //     done()
-  //   })
+    wk.Tasks['task_param2'].invoke()
 
-  //   wk.Tasks['task_param'].invoke()
+  })
 
-  // })
+  it('[Code] Optional', function( done ) {
 
-  // it('Object', function( done ) {
+    wk.Tasks['task_param3'].argv.name = 'John'
 
-  //   wk.PARAMS = wk.ARGParser.parse("task_param -- [ --who John ]".split(' '))
-  //   wk.ARGV   = wk.PARAMS.__
+    wk.Tasks['task_param3'].promise.then(( value ) => {
+      assert.equal(value, "Hello John!")
+      done()
+    })
 
-  //   wk.Tasks['task_param'].reenable()
+    wk.Tasks['task_param3'].invoke()
 
-  //   wk.Tasks['task_param'].promise.then(( value ) => {
-  //     assert.equal(value, "Hello John!")
-  //     done()
-  //   })
-
-  //   wk.Tasks['task_param'].invoke()
-
-  // })
+  })
 
 })
 
 
-// describe('Errors', function() {
-//   it('must throw', function() {
+describe('Errors', function() {
+  // it('must throw', function() {
 
-//     assert.throws(
-//       () => {
-//         wk.run('error0')
-//       },
-//       Error
-//     )
+  //   assert.throws(
+  //     () => {
+  //       wk.run('error0')
+  //     },
+  //     Error
+  //   )
 
-//   })
+  // })
 
-//   it('must be catched and finish operation', function( done ) {
+  it('must be catched and finish operation', function( done ) {
 
-//     wk.run('error1').catch(function() {
-//       assert.equal(wk.Tasks['error1'].value, 'error1')
-//       done()
-//     })
+    wk.run('error0').catch(function() {
+      assert.equal(wk.Tasks['error0'].value, 'error0')
+      done()
+    })
 
-//   })
-// })
+  })
+})
