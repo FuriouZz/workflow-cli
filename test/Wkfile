@@ -73,32 +73,6 @@ task('task_param3', function() {
 
 
 
-
-// Hook
-namespace('hook', function() {
-
-  task('task0', {
-    hooks: {
-      pre: 'hook:task1',
-      post: ['hook:task2', function() {
-        console.log('post_function')
-      }]
-    }
-  }, function() {
-    return this.path
-  })
-
-  task('task1', function() {
-    return this.path
-  })
-
-  task('task2', function() {
-    return this.path
-  })
-
-})
-
-
 // Error
 task('error0', function() {
   this.fail('Error0')
