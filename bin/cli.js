@@ -83,11 +83,13 @@ const createCommands = function() {
 
     wk.ARGParser._createHelp( this.config )
 
+    const config = this.config
+
     task('command', { visible: false, async: true }, function() {
       const tasks = Array.from(arguments)
 
       if (this.argv.help) {
-        console.log( this.argv.__config.help.description )
+        console.log( config.help.description )
         return
       }
 
