@@ -13,18 +13,17 @@ wk.CONTEXT_PARAMS = ARGParser.parse(wk.CONTEXT_ARGV, ARGConfig)
 
 wk.COMMAND_ARGV   = ARGV.command
 wk.COMMAND_PARAMS = ARGParser.parse(wk.COMMAND_ARGV)
-// console.log(wk.COMMAND_PARAMS)
+
 // Load Wkfile
 wk.load(wk.CONTEXT_PARAMS.file)
 
 // Prepare command execution
-const pad            = require('./../lib/utils/string').pad
 const Print          = require('./../lib/print')
 const ProcessManager = require('./../lib/process-manager')
-const pkg            = require('./../package.json')
 
 
 const listTasks = function() {
+  const pad = require('./../lib/utils/string').pad
 
   let tasks = []
 
@@ -88,9 +87,9 @@ const createCommands = function() {
     task('command', { visible: false, async: true }, function() {
       const tasks = Array.from(arguments)
 
-      if (this.argv.help) {
+      if (this.argv.help || !tasks) {
         console.log( config.help.description )
-        return
+        return this.complete()
       }
 
       if (this.argv.parallel) {
@@ -102,12 +101,14 @@ const createCommands = function() {
 
   })
 }
+
 /**
  * Execute command
  */
 
 // --help -h
 if (wk.CONTEXT_PARAMS.help) {
+  const pkg = require('./../package.json')
   console.log( `${pkg.name} v${pkg.version} \n`)
   console.log( wk.CONTEXT_PARAMS.__config.help.description )
   return
