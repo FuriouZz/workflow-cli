@@ -81,7 +81,7 @@ wk -T
 
 ## `wk.run`
 
-See [Execution and hooks](#execution-and-hooks)
+See [Execution](api.md#execution)
 
 
 

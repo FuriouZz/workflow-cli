@@ -159,15 +159,13 @@ task('task2', [ 'task0', 'task1' ], function() {
 
 
 
-### Execution and hooks
+### Execution
 
 You got three ways to execute a task :
 
 * Use `execute` method to execute the task only.
 
-* Use `invoke` method to execute the task with prerequisites.
-
-* Use `wk.run` function to `invoke` a task and invoke its hooks.
+* Use `invoke` or `wk.run` method to execute the task with prerequisites.
 
 **Warning** — A task is executed only once. You **MUST** call `reenable` method to execute it again or add `always_run` in task options.
 
@@ -183,14 +181,6 @@ task('task1', [ 'task0' ], { always_run: true }, function() {
   console.log('task1')
 })
 
-task('pretask1', function() {
-  console.log('pretask1')
-})
-
-task('posttask1', function() {
-  console.log('posttask1')
-})
-
 
 wk.Tasks['task1'].execute()
 // => "task1"
@@ -200,10 +190,8 @@ wk.Tasks['task1'].invoke()
 // => "task1"
 
 wk.run('task1')
-// => "pretask1"
 // => "task0"
 // => "task1"
-// => "posttask1"
 ```
 
 
