@@ -6,6 +6,9 @@
   "bin": {
     "wk": "./bin/cli.js"
   },
+  "scripts": {
+    "postinstall": "node ./hooks/postinstall.js"
+  },
   "author": "FuriouZz",
   "license": "ISC",
   "dependencies": {
@@ -27,5 +30,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/FuriouZz/workflow-cli"
-  }
+  },
+  "preferGlobal": true
 }
