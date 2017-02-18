@@ -6,6 +6,9 @@
   "bin": {
     "wk": "./bin/cli.js"
   },
+  "scripts": {
+    "postinstall": "node ./hooks/postinstall.js"
+  },
   "author": "FuriouZz",
   "license": "ISC",
   "dependencies": {
@@ -20,12 +23,13 @@
     "eslint": "^3.5.0",
     "mocha": "^3.0.2"
   },
-  "homepage": "https://github.com/FuriouZz/workflow-cli",
+  "homepage": "https://github.com/wk-js/wk",
   "bugs": {
-    "url": "https://github.com/FuriouZz/workflow-cli/issues"
+    "url": "https://github.com/wk-js/wk/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/FuriouZz/workflow-cli"
-  }
+    "url": "https://github.com/wk-js/wk"
+  },
+  "preferGlobal": true
 }
