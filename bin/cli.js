@@ -147,14 +147,43 @@ else {
 
 // Execute a command
 if (wk.COMMAND_ARGV.length > 0) {
-  const tsk = wk.COMMAND_ARGV[0]
 
-  if (tsk === 'run') createCommands()
-
-  if (wk.Tasks[tsk]) {
-    wk.Tasks[tsk].argv = Object.assign(wk.Tasks[tsk].argv, wk.COMMAND_PARAMS.__)
-    return wk.run(tsk)
+  if (wk.COMMAND_ARGV[0] === 'run') {
+    const print = Print.new()
+    print.warn('"wk run" is deprecated.')
+    createCommands()
+    wk.Tasks['run'].argv = Object.assign(wk.Tasks['run'].argv, wk.COMMAND_PARAMS.__)
+    wk.run('run')
+    return
   }
+
+  const tasks = []
+  let singleTask = false
+
+  // Execute single or multiple tasks
+  for (let i = 0, tsk, argv; i < wk.COMMAND_ARGV.length; i++) {
+    tsk  = wk.COMMAND_ARGV[i]
+    argv = wk.COMMAND_PARAMS.__
+
+    if (tsk.match(/\s/g)) {
+      argv = ARGParser._softParse(tsk.split(' '))
+      tsk  = argv._[0]
+    } else if (wk.Tasks[tsk]) {
+      singleTask = true
+    }
+
+    if (wk.Tasks[tsk]) {
+      wk.Tasks[tsk].argv = Object.assign(wk.Tasks[tsk].argv, argv)
+      tasks.push(tsk)
+    }
+
+    if (singleTask) break
+
+  }
+
+  if (wk.CONTEXT_PARAMS.parallel) return parallel(tasks)
+  else return serie(tasks)
+
 }
 
 // By default list tasks
