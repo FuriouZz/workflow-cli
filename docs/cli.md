@@ -28,7 +28,11 @@ From a namespace `message`
 wk message:hello
 ```
 
-To execute multiple tasks you can use `run` task.
+To execute multiple tasks
+
+wk "mytask0" "mytask1"
+
+**[Deprecated]** To execute multiple tasks you can use `run` task.
 
 ```sh
 wk run mytask0 mytask1
@@ -44,7 +48,13 @@ Every arguments after the task will be added to `wk.COMMAND_ARGV` and parsed res
 ENV=staging wk --verbose mytask --message="Hello World"
 ```
 
-To execute multiple tasks with arguments, use `run` task.
+To execute multiple tasks with arguments.
+
+```sh
+wk 'mytask0 --message="Hello World"' 'mytask1 --message="Surprise"'
+```
+
+**[Deprecated]** To execute multiple tasks with arguments, use `run` task.
 
 ```sh
 wk run mytask0 -- [ --message="Hello World" ] mytask1 -- [ --message="Surprise" ]
